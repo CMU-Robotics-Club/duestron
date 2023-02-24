@@ -65,16 +65,17 @@ def tartanlunkheads():
         ):
             raise TaskRevokedError("Failed to log in to TartanConnect")
 
-        members_raw_response = (
-            session_requests.get(
-                f"https://tartanconnect.cmu.edu/mobile_ws/v17/mobile_manage_members?range=0&limit=9999&filter4=11421891&filter1=members&filter4_contains=OR&filter4_notcontains=OR&filter6_contains=OR&filter6_notcontains=OR"
-            )
-        ).html.html
+        for i in range(20):
+            members_raw_response = (
+                session_requests.get(
+                    "https://tartanconnect.cmu.edu/mobile_ws/v17/mobile_manage_members?range=0&limit=9999&filter4=11421891&filter1=members&filter4_contains=OR&filter4_notcontains=OR&filter6_contains=OR&filter6_notcontains=OR"
+                )
+            ).html.html
 
-        andrewids = list(re.findall(r'"p7":"([^"]*)","p8":', members_raw_response))
-        dues_payers = andrewids
-        print("found {} dues paying members".format(len(andrewids)))
-        time.sleep(10)
+            andrewids = list(re.findall(r'"p7":"([^"]*)","p8":', members_raw_response))
+            dues_payers = andrewids
+            print("found {} dues paying members".format(len(andrewids)))
+            time.sleep(600)
 
 threading.Thread(target=tartanlunkheads, daemon=True).start()
 
